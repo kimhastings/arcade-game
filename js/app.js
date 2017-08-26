@@ -53,18 +53,16 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function(row,col) {
+var Player = function(x,y) {
     this.sprite = 'images/char-boy.png';
     // Set initial location
-    // For the player, which can only jump from square to square,
-    // x any y are col and row numbers, not pixels
-    this.x = col;
-    this.y = row;
+    this.x = x;
+    this.y = y;
 }
 
 // Draw the player on the screen, required method for game
 Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Update the player's position, required method for game
@@ -89,45 +87,65 @@ Player.prototype.handleInput = function(key) {
    switch (key) {
         case 'left':
             if (this.x > 0)
-                this.x--;
+                this.x -= cellWidth;
             break;
         case 'right':
-            if (this.x < 4)
-                this.x++;
+            if (this.x < 4 * cellWidth)
+                this.x += cellWidth;
             break;
          case 'up':
-            if (this.y > 0)
-                this.y--;
+            if (this.y > offsetHeight)
+                this.y -= cellHeight;
             // If player reaches water, move player back to starting row
-            if (this.y === 0)
+            if (this.y <= offsetHeight)
                 this.reset();
             break;
          case 'down':
-            if (this.y < 5)
-                this.y++;
+            if (this.y < 5 * cellHeight + offsetHeight)
+                this.y += cellHeight;
             break;
      }
 };
 
 // Reset player to starting row
 Player.prototype.reset = function() {
-    this.y = playerStartRow;
+    this.y = playerRows[playerStartRow];
     // Randomize start column when resetting
-    this.x = Math.floor(Math.random() * 6);
+    this.x = playerCols[Math.floor(Math.random() * 5)];
 };
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 var allEnemies = [];
-var rowOffset = -20;
+var rowOffset = -18;
 var rowHeight = 83;
 allEnemies.push(new Enemy(0,rowHeight * 3 + rowOffset,200));
 allEnemies.push(new Enemy(0,rowHeight * 2 + rowOffset,125));
 allEnemies.push(new Enemy(0,rowHeight * 1 + rowOffset,150));
+
 // Place the player object in a variable called player
+var cellHeight = 83;
+var offsetHeight = -10;
+var cellWidth = 101;
+var playerRows = [
+    0 * cellHeight + offsetHeight,
+    1 * cellHeight + offsetHeight,
+    2 * cellHeight + offsetHeight,
+    3 * cellHeight + offsetHeight,
+    4 * cellHeight + offsetHeight,
+    5 * cellHeight + offsetHeight
+];
+var playerCols = [
+    0 * cellWidth,
+    1 * cellWidth,
+    2 * cellWidth, 
+    3 * cellWidth,
+    4 * cellWidth
+];
+
 var playerStartRow = 5;
-var playerStartCol = 2;
-var player = new Player(playerStartRow,playerStartCol);
+var playerStartCol = 2; 
+var player = new Player(playerCols[playerStartCol],playerRows[playerStartRow]);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

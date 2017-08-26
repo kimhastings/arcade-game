@@ -119,10 +119,11 @@ Player.prototype.reset = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 var allEnemies = [];
-var rowOffset = 73;
-allEnemies.push(new Enemy(0,rowOffset * 3,200));
-allEnemies.push(new Enemy(0,rowOffset * 2,125));
-allEnemies.push(new Enemy(0,rowOffset * 1,150));
+var rowOffset = -20;
+var rowHeight = 83;
+allEnemies.push(new Enemy(0,rowHeight * 3 + rowOffset,200));
+allEnemies.push(new Enemy(0,rowHeight * 2 + rowOffset,125));
+allEnemies.push(new Enemy(0,rowHeight * 1 + rowOffset,150));
 // Place the player object in a variable called player
 var playerStartRow = 5;
 var playerStartCol = 2;

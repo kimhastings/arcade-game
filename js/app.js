@@ -1,5 +1,5 @@
 // Enemies our player must avoid
-var Enemy = function(x,y,speed) {
+var Enemy = function(x,y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -7,11 +7,11 @@ var Enemy = function(x,y,speed) {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
 
-    // Set initial location and speed
+    // Set initial location and speed (random)
     // For enemies, which move smoothly, x and y are in pixels
     this.x = x;
     this.y = y;
-    this.speed = speed;
+    this.speed = this.randomSpeed();
 };
 
 // Update the enemy's position, required method for game
@@ -70,15 +70,25 @@ Player.prototype.update = function() {
     // Updating player location is actually done in handleInput()
 
     // Handle enemy collisions (player runs into enemy)
+    /*
     allEnemies.forEach(function(enemy) {
-        /*
-        if (this.y === enemy.row) and (this.x === enemy.col) {
+        if ((this.x === enemy.x) && (this.y === enemy.y)) {
             this.reset();
             break;
         }
-        */
     });
-};
+    */
+    // Could not use allEnemies.forEach because of break when collision detected
+    for (var i = 0; i < allEnemies.length; i++) {
+        var rowMatch = (this.y === allEnemies[i].y + rowOffsetDifference);
+        var colMatch = (this.x > allEnemies[i].x - cellWidth/2) && (this.x < allEnemies[i].x + cellWidth/2)
+        if (rowMatch && colMatch) {
+            console.log("COLLISION!");
+            this.reset();
+            break;
+        }
+    }
+ };
 
 // Handle user input regarding player movement
 Player.prototype.handleInput = function(key) {
@@ -93,16 +103,16 @@ Player.prototype.handleInput = function(key) {
             if (this.x < 4 * cellWidth)
                 this.x += cellWidth;
             break;
-         case 'up':
-            if (this.y > offsetHeight)
-                this.y -= cellHeight;
+        case 'up':
             // If player reaches water, move player back to starting row
-            if (this.y <= offsetHeight)
+            if (this.y < rowHeight)
                 this.reset();
+            else
+                this.y -= rowHeight;
             break;
          case 'down':
-            if (this.y < 5 * cellHeight + offsetHeight)
-                this.y += cellHeight;
+            if (this.y < 5 * rowHeight + playerRowOffset)
+                this.y += rowHeight;
             break;
      }
 };
@@ -115,25 +125,26 @@ Player.prototype.reset = function() {
 };
 
 // Now instantiate your objects.
+var cellWidth = 101;
+var rowHeight = 83;
+var enemyRowOffset = -18;
+var playerRowOffset = -10;
+var rowOffsetDifference = playerRowOffset - enemyRowOffset;
+
 // Place all enemy objects in an array called allEnemies
 var allEnemies = [];
-var rowOffset = -18;
-var rowHeight = 83;
-allEnemies.push(new Enemy(0,rowHeight * 3 + rowOffset,200));
-allEnemies.push(new Enemy(0,rowHeight * 2 + rowOffset,125));
-allEnemies.push(new Enemy(0,rowHeight * 1 + rowOffset,150));
+allEnemies.push(new Enemy(0,rowHeight * 3 + enemyRowOffset));
+allEnemies.push(new Enemy(0,rowHeight * 2 + enemyRowOffset));
+allEnemies.push(new Enemy(0,rowHeight * 1 + enemyRowOffset));
 
 // Place the player object in a variable called player
-var cellHeight = 83;
-var offsetHeight = -10;
-var cellWidth = 101;
 var playerRows = [
-    0 * cellHeight + offsetHeight,
-    1 * cellHeight + offsetHeight,
-    2 * cellHeight + offsetHeight,
-    3 * cellHeight + offsetHeight,
-    4 * cellHeight + offsetHeight,
-    5 * cellHeight + offsetHeight
+    0 * rowHeight + playerRowOffset,
+    1 * rowHeight + playerRowOffset,
+    2 * rowHeight + playerRowOffset,
+    3 * rowHeight + playerRowOffset,
+    4 * rowHeight + playerRowOffset,
+    5 * rowHeight + playerRowOffset
 ];
 var playerCols = [
     0 * cellWidth,

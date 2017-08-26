@@ -8,6 +8,7 @@ var Enemy = function(x,y,speed) {
     this.sprite = 'images/enemy-bug.png';
 
     // Set initial location and speed
+    // For enemies, which move smoothly, x and y are in pixels
     this.x = x;
     this.y = y;
     this.speed = speed;
@@ -23,10 +24,10 @@ Enemy.prototype.update = function(dt) {
     // Update enemy location
     this.x += this.speed * dt;
 
-    // Handle player collisions
+    // Handle player collisions (enemy runs into player)
 
     // When enemy reaches right edge, reset to left edge
-    if (this.x > 505)
+    if (this.x > ctx.canvas.width)
         this.reset();
 
 };
@@ -34,6 +35,14 @@ Enemy.prototype.update = function(dt) {
 // Reset enemy to starting row with new speed
 Enemy.prototype.reset = function() {
     this.x = 0;
+    this.speed = this.randomSpeed();
+};
+
+// Return new random speed for enemy
+Enemy.prototype.randomSpeed = function() {
+    var speedMin = 150;
+    var speedMax = 300;
+    return Math.random() * (speedMax - speedMin) + speedMin;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -47,6 +56,8 @@ Enemy.prototype.render = function() {
 var Player = function(row,col) {
     this.sprite = 'images/char-boy.png';
     // Set initial location
+    // For the player, which can only jump from square to square,
+    // x any y are col and row numbers, not pixels
     this.x = col;
     this.y = row;
 }
@@ -58,9 +69,17 @@ Player.prototype.render = function() {
 
 // Update the player's position, required method for game
 Player.prototype.update = function() {
-    // Update player location
+    // Updating player location is actually done in handleInput()
 
-    // Handle enemy collisions?
+    // Handle enemy collisions (player runs into enemy)
+    allEnemies.forEach(function(enemy) {
+        /*
+        if (this.y === enemy.row) and (this.x === enemy.col) {
+            this.reset();
+            break;
+        }
+        */
+    });
 };
 
 // Handle user input regarding player movement
@@ -93,22 +112,21 @@ Player.prototype.handleInput = function(key) {
 // Reset player to starting row
 Player.prototype.reset = function() {
     this.y = playerStartRow;
+    // Randomize start column when resetting
+    this.x = Math.floor(Math.random() * 6);
 };
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-var rowOffset = 73;
-
 var allEnemies = [];
-allEnemies.push(new Enemy(0,rowOffset * 3,110));
-allEnemies.push(new Enemy(0,rowOffset * 2,100));
+var rowOffset = 73;
+allEnemies.push(new Enemy(0,rowOffset * 3,200));
+allEnemies.push(new Enemy(0,rowOffset * 2,125));
 allEnemies.push(new Enemy(0,rowOffset * 1,150));
-
+// Place the player object in a variable called player
 var playerStartRow = 5;
 var playerStartCol = 2;
 var player = new Player(playerStartRow,playerStartCol);
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

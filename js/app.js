@@ -24,7 +24,7 @@ Enemy.prototype.update = function(dt) {
     // Update enemy location
     this.x += this.speed * dt;
 
-    // Handle player collisions (enemy runs into player)
+    // Handle player collisions is done in player update function
 
     // When enemy reaches right edge, reset to left edge
     if (this.x > ctx.canvas.width)
@@ -78,11 +78,13 @@ Player.prototype.update = function() {
         }
     });
     */
-    // Could not use allEnemies.forEach because of break when collision detected
+    // Could not use allEnemies.forEach (above) because of break when collision detected
     for (var i = 0; i < allEnemies.length; i++) {
+        // Checking enemy width inside for loop in case not all enemies are the same sprite
+        var enemyWidth = Resources.get(allEnemies[i].sprite).width;
+        var colMatch = (this.x > allEnemies[i].x - enemyWidth/2) && (this.x < allEnemies[i].x + enemyWidth/2)
         var rowMatch = (this.y === allEnemies[i].y + rowOffsetDifference);
-        var colMatch = (this.x > allEnemies[i].x - cellWidth/2) && (this.x < allEnemies[i].x + cellWidth/2)
-        if (rowMatch && colMatch) {
+        if (colMatch && rowMatch) {
             $.alert("Rats, you lost this round. Better luck next time!","Beat the Bugs");
             this.reset();
             break;

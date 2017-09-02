@@ -54,7 +54,7 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function(x,y) {
-    this.sprite = 'images/char-boy.png';
+    this.sprite = 'images/char-horn-girl.png';
     // Set initial location
     this.x = x;
     this.y = y;
@@ -83,7 +83,7 @@ Player.prototype.update = function() {
         var rowMatch = (this.y === allEnemies[i].y + rowOffsetDifference);
         var colMatch = (this.x > allEnemies[i].x - cellWidth/2) && (this.x < allEnemies[i].x + cellWidth/2)
         if (rowMatch && colMatch) {
-            console.log("COLLISION!");
+            $.alert("Rats, you lost this round. Better luck next time!","Beat the Bugs");
             this.reset();
             break;
         }
@@ -105,8 +105,10 @@ Player.prototype.handleInput = function(key) {
             break;
         case 'up':
             // If player reaches water, move player back to starting row
-            if (this.y < rowHeight)
-                this.reset();
+            if (this.y < rowHeight) {
+                $.alert("Congratulations, you made it!","Beat the Bugs");
+                this.reset();                
+            }
             else
                 this.y -= rowHeight;
             break;

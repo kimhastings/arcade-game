@@ -2,7 +2,7 @@
 
 ## Starting the Game
 
-Click [here](https://kimhastings.github.io/arcade-game) to start playing Beat the Bugs in your browser.
+Click [here](https://kimhastings.github.io/arcade-game/) to start playing Beat the Bugs in your browser.
 
 ## Playing the Game
 

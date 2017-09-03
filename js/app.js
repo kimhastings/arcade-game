@@ -58,7 +58,7 @@ var Player = function(x,y) {
     // Set initial location
     this.x = x;
     this.y = y;
-}
+};
 
 // Draw the player on the screen, required method for game
 Player.prototype.render = function() {
@@ -82,7 +82,7 @@ Player.prototype.update = function() {
     for (var i = 0; i < allEnemies.length; i++) {
         // Checking enemy width inside for loop in case not all enemies are the same sprite
         var enemyWidth = Resources.get(allEnemies[i].sprite).width;
-        var colMatch = (this.x > allEnemies[i].x - enemyWidth/2) && (this.x < allEnemies[i].x + enemyWidth/2)
+        var colMatch = (this.x > allEnemies[i].x - enemyWidth/2) && (this.x < allEnemies[i].x + enemyWidth/2);
         var rowMatch = (this.y === allEnemies[i].y + rowOffsetDifference);
         if (colMatch && rowMatch) {
             $.alert("Rats, you lost this round. Better luck next time!","Beat the Bugs");

@@ -122,7 +122,7 @@ var Engine = (function(global) {
         // Add game title
         ctx.clearRect(0,0,500,100);
         ctx.font = '60px serif';
-        ctx.fillStyle = 'blue';
+        ctx.fillStyle = 'brown';
         ctx.fillText('BEAT THE BUGS!',20,45);
 
         /* Loop through the number of rows and columns we've defined above
